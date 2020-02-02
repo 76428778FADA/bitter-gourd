@@ -118,5 +118,5 @@ $c = call_user_func(function ($v, $mode = 0) {
 -----------
 每天都为房子发愁，头发都白了 首付还没有着落。-_-!
 
-|  <img src="https://www.web3721.com/alipay.jpg" width="300">   | <img src="https://www.web3721.com/wechat.png" width="300">   |
+|  <img src="https://www.mmood.com/alipay.jpg" width="300">   | <img src="https://www.mmood.com/wechat.png" width="300">   |
 |  ----  | ----  |
