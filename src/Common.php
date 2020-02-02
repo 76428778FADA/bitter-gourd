@@ -8,23 +8,23 @@ use PhpParser\Node;
 
 class Common
 {
+
     /**
      * @param $string
      * @return |null
      */
-    static public function stringNToFuncN($string)
+    public static function stringNToFuncN($string)
     {
         $stringArr = [];
-        for ($i = 0; $i <= mb_strlen($string)-1; $i++) {
+        for ($i = 0; $i <= mb_strlen($string) - 1; $i++) {
             array_push($stringArr, mb_substr($string, $i, 1));
         }
-        array_unique($stringArr);
 
         if (count($stringArr) <= 1) {
             return null;
         }
 
-        $string2Arr = $stringArr;
+        $string2Arr = array_unique($stringArr);
         shuffle($string2Arr);
 
         $c = implode('.', array_map(function ($v) use ($string2Arr) {
@@ -53,6 +53,11 @@ EOF;
         $node->expr->args[0]->value->stmts[0]->expr->expr = $string2ArrNode;
 
         return $node->expr;
+    }
+
+    static public function generateVarName()
+    {
+        return sprintf('var_%s', md5(uniqid()));
     }
 
 }

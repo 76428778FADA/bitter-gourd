@@ -2,6 +2,7 @@
 
 namespace BitterGourd\Command;
 
+use BitterGourd\NodeVisitor\CommonNodeVisitor;
 use BitterGourd\NodeVisitor\ForeachNodeVisitor;
 use BitterGourd\NodeVisitor\ForNodeVisitor;
 use BitterGourd\NodeVisitor\FunctionNodeVisitor;
@@ -23,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use PhpParser\PrettyPrinter;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class RunCommand extends Command
 {
@@ -32,6 +34,7 @@ class RunCommand extends Command
     protected function configure()
     {
         $this
+            ->addArgument('name', InputArgument::REQUIRED, 'Who do you want to greet?')
             ->setDescription('Describe args behaviors')
             ->setDefinition(
                 new InputDefinition([
@@ -50,6 +53,13 @@ class RunCommand extends Command
     {
         $filesystem = new Filesystem();
         $finder = new Finder();
+
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion('Have you backed up your files or directories? (y):', true);
+
+        if (!$helper->ask($input, $output, $question)) {
+            return 0;
+        }
 
         $path = $input->getOption('path');
         $file = $input->getOption('file');

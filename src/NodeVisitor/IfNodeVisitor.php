@@ -2,6 +2,7 @@
 
 namespace BitterGourd\NodeVisitor;
 
+use BitterGourd\Common;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
@@ -17,7 +18,7 @@ class IfNodeVisitor extends NodeVisitorAbstract
                 return null;
             }
 
-            $endName = 'v' . mt_rand(0, 99999);
+            $endName = Common::generateVarName();
             $code = <<<EOF
             <?php
             switch (\$cond)

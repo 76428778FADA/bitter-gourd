@@ -14,9 +14,6 @@ class PropertyFetchNodeVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Node\Expr\PropertyFetch && $node->getAttribute('converted') != true) {
 
-            if(!isset($node->name->name)){
-                exit;
-            }
             if (!is_string($node->name->name)) {
                 return null;
             }
