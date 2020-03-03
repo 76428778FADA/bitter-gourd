@@ -2,6 +2,7 @@ Bitter Gourd
 ==========
 
 It is a PHP source code obfuscator, it can make PHP code dirty and hard to read, so far, it is only a development version.
+https://github.com/imsheng/bitter-gourd
 
 Features
 --------
@@ -25,6 +26,10 @@ Quick Start
     or
     php bin/console -f/test.php
 
+
+Functions that can be converted
+-----------
+array_merge, count, array_push, trim,strlen, mb_strlen, str_shuffle
 
 Example
 -----------
