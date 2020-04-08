@@ -87,6 +87,10 @@ EOF;
         $args = $node->args;
         $varName = $var->value->name;
 
+        if (!is_string($varName)) {
+            return null;
+        }
+
         $code = <<<EOF
             <?php
                 call_user_func(function () use (&\$a) {

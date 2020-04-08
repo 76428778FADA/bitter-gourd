@@ -21,10 +21,14 @@ Quick Start
     composer install
     
     php bin/console -h
-    or
+    
+    # or
     php bin/console -p/my_project
-    or
+    # windows: php bin/console -pc:\my_project
+    
+    # or
     php bin/console -f/test.php
+    # windows: php bin/console -fc:\test.php
 
 
 Functions that can be converted
@@ -33,7 +37,7 @@ array_merge, count, array_push, trim,strlen, mb_strlen, str_shuffle
 
 Example
 -----------
-before
+Before
 ```php
 <?php
 
@@ -58,7 +62,7 @@ default:
 
 $c=count([1,2,3]);
 ```
-after
+After
 ```php
 <?php
 

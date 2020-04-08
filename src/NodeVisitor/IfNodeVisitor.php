@@ -12,13 +12,14 @@ class IfNodeVisitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\If_ && count($node->elseifs) <= 0) {
+        if ($node instanceof Node\Stmt\If_ && count($node->elseifs) <= 0 && !(isset($node->getAttributes()['parent']) && $node->getAttributes()['parent'] instanceof Node\Stmt\Else_)) {
 
             if ($node->getAttribute('if_converted')) {
                 return null;
             }
 
             $endName = Common::generateVarName();
+
             $code = <<<EOF
             <?php
             switch (\$cond)
