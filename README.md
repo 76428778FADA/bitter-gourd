@@ -7,9 +7,8 @@ https://github.com/imsheng/bitter-gourd
 Features
 --------
 
- * No dependence.
+ * Dependency-free.
  * For any PHP framework.
- * **Overall performance may be reduced by 1% -?%.**
 
 Quick Start
 -----------

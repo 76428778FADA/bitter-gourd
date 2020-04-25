@@ -44,6 +44,10 @@ class StringNodeVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Node\Scalar\String_ && $node->getAttribute('converted') != true) {
 
+            if ($parentNode instanceof Node\Param && $parentNode->getAttribute('parent') instanceof Node\Stmt\Function_) {
+                return null;
+            }
+
             if ($parentNode instanceof Node\Expr\ArrayItem && $parentNode->key instanceof Node\Scalar\String_ && $parentNode->key->value == $node->value) {
                 return null;
             }

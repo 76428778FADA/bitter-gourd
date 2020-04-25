@@ -36,12 +36,12 @@ EOF;
             $whileAst = $whileParser->parse(trim($code));
             $node->setAttribute('parent', null);
 
-            $whileAst[0] = $node->init[0];
+            $whileAst[0]->expr = $node->init[0];
             if (isset($node->cond[0])) {
                 $whileAst[1]->stmts[0]->cond = $node->cond[0];
             }
             if (isset($node->loop[0])) {
-                $whileAst[1]->stmts[1] = $node->loop[0];
+                $whileAst[1]->stmts[1]->expr = $node->loop[0];
             }
             $whileAst[1]->stmts = array_merge([$whileAst[1]->stmts[0]], $node->stmts, [$whileAst[1]->stmts[1]]);
 

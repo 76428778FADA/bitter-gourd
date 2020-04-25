@@ -2,7 +2,6 @@
 
 namespace BitterGourd\Command;
 
-use BitterGourd\NodeVisitor\CommonNodeVisitor;
 use BitterGourd\NodeVisitor\ForeachNodeVisitor;
 use BitterGourd\NodeVisitor\ForNodeVisitor;
 use BitterGourd\NodeVisitor\FunctionNodeVisitor;

@@ -11,7 +11,7 @@ class Common
 
     /**
      * @param $string
-     * @return |null
+     * @return Node|null
      */
     public static function stringNToFuncN($string)
     {
