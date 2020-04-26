@@ -24,9 +24,13 @@ class VariableNodeVisitor extends NodeVisitorAbstract
                 return null;
             }
 
-/*            if ($parentNode instanceof Node\Expr\MethodCall) {
+            if ($parentNode instanceof Node\Stmt\Global_) {
                 return null;
-            }*/
+            }
+
+            /*            if ($parentNode instanceof Node\Expr\MethodCall) {
+                            return null;
+                        }*/
 
             if ($parentNode instanceof Node\Expr\PropertyFetch) {
                 return null;
@@ -35,7 +39,7 @@ class VariableNodeVisitor extends NodeVisitorAbstract
             if (!is_string($node->name)) {
                 return null;
             }
-            
+
             $newNode = Common::stringNToFuncN($node->name);
 
             if ($newNode != null) {
