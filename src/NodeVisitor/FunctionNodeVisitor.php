@@ -2,9 +2,11 @@
 
 namespace BitterGourd\NodeVisitor;
 
+use BitterGourd\Common;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinter;
 
 class FunctionNodeVisitor extends NodeVisitorAbstract
 {
@@ -83,38 +85,33 @@ EOF;
 
     private function f_array_push(Node\Expr\FuncCall $node)
     {
-        $var = array_shift($node->args);
+        return $node;
         $args = $node->args;
-        $varName = $var->value->name;
-
-        if (!is_string($varName)) {
-            return null;
-        }
+        array_shift($args);
+        $varName = $endName = Common::generateVarName();
 
         $code = <<<EOF
             <?php
-                call_user_func(function () use (&\$a) {
-                    \$b =& \$$varName;
+                \$$varName =& \$x;
+                call_user_func(function () use (&\$$varName) {
                     \$v = func_get_args();
+                    \$c =& \$$varName;
                     foreach (\$v as \$i) {
-                        \$b[] = \$i;
+                        \$c[] = \$i;
                     }
-                    return count(\$b);
+                    return count(\$c);
                 }, 1, 2);
 EOF;
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $ast = $parser->parse(trim($code));
+        $newNode = $parser->parse(trim($code));
 
-        /** @var Node\Stmt\Expression $newNode */
-        $newNode = $ast[0];
+        $newNode[0]->expr->expr = $node->args[0]->value;
+        $newNode[1]->expr->args = array_merge([$newNode[1]->expr->args[0]], $args);
 
-        $newNode->expr->args = array_merge([$newNode->expr->args[0]], $args);
-        $newNode->expr->args[0]->value->uses[0]->var = $var;
+        $newNode[0]->expr->setAttribute('converted', true);
+        $newNode[1]->expr->setAttribute('converted', true);
 
-        $newNode->expr->setAttribute('converted', true);
-
-
-        return $newNode->expr;
+        return $newNode;
     }
 
     private function f_trim(Node\Expr\FuncCall $node)

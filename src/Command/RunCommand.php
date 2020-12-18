@@ -33,12 +33,12 @@ class RunCommand extends Command
     protected function configure()
     {
         $this
-            ->addArgument('name', InputArgument::REQUIRED, 'Who do you want to greet?')
             ->setDescription('Describe args behaviors')
             ->setDefinition(
                 new InputDefinition([
-                    new InputOption('path', 'p', InputArgument::OPTIONAL, 'Select a directory.'),
-                    new InputOption('file', 'f', InputArgument::OPTIONAL, 'Select a file.'),
+                    new InputOption('path', 'p', InputArgument::OPTIONAL, 'Select a directory or file path.'),
+                    new InputOption('loop', 'l', InputArgument::OPTIONAL, 'Loop. The default value is 1'),
+                    new InputOption('test', 't', InputArgument::REQUIRED, 'Test.')
                 ])
             );
     }
@@ -53,32 +53,44 @@ class RunCommand extends Command
         $filesystem = new Filesystem();
         $finder = new Finder();
 
+        $path = $input->getOption('path');
+        $loop = abs(intval($input->getOption('loop') ?? 1));
+        $isTest = $input->getOption('test');
+        $phpFiles = [];
+
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('Have you backed up your files or directories? (y):', true);
 
-        if (!$helper->ask($input, $output, $question)) {
+        if (!$isTest && !$helper->ask($input, $output, $question)) {
             return 0;
         }
 
-        $path = $input->getOption('path');
-        $file = $input->getOption('file');
-        $phpFiles = [];
+        if ($filesystem->exists($path)) {
+            $output->writeln('Path error!');
+            return 0;
+        }
 
-        if ($path != null && $filesystem->exists($path)) {
+        if (is_dir($path)) {
             $phpFiles = iterator_to_array($finder->in($path)->name('*.php')->files());
         }
 
-        if (count($phpFiles) <= 0) {
-            if ($file != null && $filesystem->exists($file)) {
-                $phpFiles = [$file];
-            }
+        if (!is_dir($path)) {
+            $phpFiles = [$path];
         }
 
         foreach ($phpFiles as $phpFile) {
             $output->writeln($phpFile);
             $code = trim(file_get_contents($phpFile));
-            $newCode = $this->obscure($code);
-            file_put_contents($phpFile, $newCode);
+
+            for ($i = 0; $i < $loop; $i++) {
+                $code = $this->obscure($code);
+            }
+
+            if ($isTest) {
+                $parsePath = pathinfo($phpFile);
+                $phpFile = sprintf('%s%s%s-test.%s', $parsePath['dirname'], DIRECTORY_SEPARATOR, $parsePath['filename'], $parsePath['extension']);
+            }
+            file_put_contents($phpFile, $code);
         }
 
         $output->writeln('done.');

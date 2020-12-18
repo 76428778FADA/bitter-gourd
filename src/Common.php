@@ -57,7 +57,7 @@ EOF;
 
     static public function generateVarName()
     {
-        return sprintf('var_%s', md5(uniqid()));
+        return sprintf('v%s', uniqid());
     }
 
 }
