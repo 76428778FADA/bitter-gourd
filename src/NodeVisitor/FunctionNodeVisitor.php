@@ -85,33 +85,30 @@ EOF;
 
     private function f_array_push(Node\Expr\FuncCall $node)
     {
-        return $node;
         $args = $node->args;
-        array_shift($args);
-        $varName = $endName = Common::generateVarName();
+        $fArgs = array_shift($args);
 
         $code = <<<EOF
             <?php
-                \$$varName =& \$x;
-                call_user_func(function () use (&\$$varName) {
+                call_user_func(function () {
                     \$v = func_get_args();
-                    \$c =& \$$varName;
-                    foreach (\$v as \$i) {
-                        \$c[] = \$i;
+                    \$aa =& \$v[0][0];
+                    for (\$i = 1; \$i < count(\$v); \$i++) {
+                        \$aa[] = \$v[\$i];
                     }
-                    return count(\$c);
-                }, 1, 2);
+                    return count(\$aa);
+                }, [&\$a], \$v1, \$v2);
 EOF;
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $newNode = $parser->parse(trim($code));
+        $newNode = $newNode[0];
 
-        $newNode[0]->expr->expr = $node->args[0]->value;
-        $newNode[1]->expr->args = array_merge([$newNode[1]->expr->args[0]], $args);
+        $newNode->expr->args[1]->value->items[0]->value = $fArgs;
+        $newNode->expr->args = array_merge([$newNode->expr->args[0], $newNode->expr->args[1]], $args);
 
-        $newNode[0]->expr->setAttribute('converted', true);
-        $newNode[1]->expr->setAttribute('converted', true);
+        $newNode->expr->setAttribute('converted', true);
 
-        return $newNode;
+        return $newNode->expr;
     }
 
     private function f_trim(Node\Expr\FuncCall $node)

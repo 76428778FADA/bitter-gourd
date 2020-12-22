@@ -65,7 +65,7 @@ class RunCommand extends Command
             return 0;
         }
 
-        if ($filesystem->exists($path)) {
+        if (!$filesystem->exists($path)) {
             $output->writeln('Path error!');
             return 0;
         }
