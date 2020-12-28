@@ -21,14 +21,9 @@ Quick Start
     
     php bin/console -h
     
-    # or
-    php bin/console -p/my_project
-    # windows: php bin/console -pc:\my_project
-    
-    # or
-    php bin/console -f/test.php
-    # windows: php bin/console -fc:\test.php
-
+    # test
+    php bin/console -p/my_project -t
+    # windows: php bin/console -pc:\my_project -t
 
 Functions that can be converted
 -----------
@@ -38,88 +33,126 @@ Example
 -----------
 Before
 ```php
-<?php
+$str1 = 'abcde';
+$str2 = 'fghij';
+$str3 = '   fghij   ';
+$str4 = '您好！';
+$num1 = 1234;
+$num2 = 6789;
+$arr1 = [1, 2, 3, 4, 5];
+$arr2 = ['a', 'b', 'c', 'd', 'e'];
+$arr3 = ['a' => 'f', 'b' => 'g', 'c' => 'h', 'd' => 'i', 'e' => 'j'];
+$arr4 = ['f' => 'l', 'g' => 'm', 'h' => 'n', 'i' => 'o', 'j' => 'p'];
 
-$str='abc';
-if ($str=='abc')
-{
-    echo "abc";
+echo '# if $str1 == $str2' . PHP_EOL;
+if ($str1 == $str2) {
+    echo '$str1 == $str2' . PHP_EOL;
+} else {
+    echo '$str1 != $str2' . PHP_EOL;
 }
+echo PHP_EOL;
 
-$favcolor="red";
-switch ($favcolor)
-{
-case "red":
-    echo "red!";
-    break;
-case "blue":
-    echo "blue!";
-    break;
-default:
-    echo '??';
+echo '# foreach $arr1' . PHP_EOL;
+foreach ($arr1 as $item) {
+    echo $item . ' ';
 }
+echo PHP_EOL . PHP_EOL;
 
-$c=count([1,2,3]);
+echo '# for $arr2' . PHP_EOL;
+for ($i = 0; $i < count($arr2); $i++) {
+    echo $arr2[$i] . ' ';
+}
+echo PHP_EOL . PHP_EOL;
+
+echo '# switch $str1' . PHP_EOL;
+switch ($str1) {
+    case "abcde":
+        echo "abcde!";
+        break;
+    case "fghij":
+        echo "fghij!";
+        break;
+    default:
+        echo '??';
+}
+echo PHP_EOL . PHP_EOL;
+
+echo '# while $arr2' . PHP_EOL;
+$i = 0;
+while ($i < count($arr2)) {
+    echo $arr2[$i] . ' ';
+    $i++;
+}
+echo PHP_EOL . PHP_EOL;
+
+echo '# array_merge $arr1 $arr2' . PHP_EOL;
+print_r(array_merge($arr1, $arr2));
+echo PHP_EOL . PHP_EOL;
+
+echo '# count $arr1' . PHP_EOL;
+echo count($arr1) . PHP_EOL;
+echo PHP_EOL;
+
+echo '# array_push $arr1' . PHP_EOL;
+$tArr1 = $arr1;
+array_push($tArr1, 6, 7, 8, 9);
+print_r($tArr1);
+echo PHP_EOL . PHP_EOL;
+
+echo '# trim $str3' . PHP_EOL;
+echo trim($str3) . PHP_EOL;
+echo PHP_EOL;
+
+echo '# time' . PHP_EOL;
+echo time() . PHP_EOL;
+echo PHP_EOL;
 ```
 After
 ```php
 <?php
-
 ${call_user_func(function () {
-    $b = array('t', 's', 'r');
-    return $b[1] . $b[0] . $b[2];
+    return hex2bin('73747231');
 })} = call_user_func(function () {
-    $b = array('c', 'a', 'b');
-    return $b[1] . $b[2] . $b[0];
+    return hex2bin('6162636465');
 });
-switch (${call_user_func(function () {
-    $b = array('r', 't', 's');
-    return $b[2] . $b[1] . $b[0];
-})} == call_user_func(function () {
-    $b = array('b', 'c', 'a');
-    return $b[2] . $b[0] . $b[1];
-})) {
-    case false:
-        goto var_3cc28eda4671dbf7aa218a290eaa1a47;
-    case true:
-        echo "abc";
-        goto var_3cc28eda4671dbf7aa218a290eaa1a47;
-    default:
-        goto var_3cc28eda4671dbf7aa218a290eaa1a47;
-}
-var_3cc28eda4671dbf7aa218a290eaa1a47:
 ${call_user_func(function () {
-    $b = array('r', 'c', 'l', 'v', 'a', 'o', 'f');
-    return $b[6] . $b[4] . $b[3] . $b[1] . $b[5] . $b[2] . $b[5] . $b[0];
-})} = "red";
-if (${call_user_func(function () {
-    $b = array('o', 'c', 'v', 'a', 'f', 'l', 'r');
-    return $b[4] . $b[3] . $b[2] . $b[1] . $b[0] . $b[5] . $b[0] . $b[6];
-})} == "red") {
-    echo "red!";
-    $v30720d7907a85edd2618d558bf972f6a = true;
-}
-if (${call_user_func(function () {
-    $b = array('o', 'c', 'v', 'a', 'f', 'l', 'r');
-    return $b[4] . $b[3] . $b[2] . $b[1] . $b[0] . $b[5] . $b[0] . $b[6];
-})} == "blue") {
-    echo "blue!";
-    $v30720d7907a85edd2618d558bf972f6a = true;
-}
-if ($v30720d7907a85edd2618d558bf972f6a == false) {
-    echo call_user_func(function () {
-        $b = array('?');
-        return $b[0] . $b[0];
-    });
-    $v30720d7907a85edd2618d558bf972f6a = true;
-}
-$c = call_user_func(function ($v, $mode = 0) {
-    $s = 0;
-    foreach ($v as $i) {
-        $s++;
-    }
-    return $s;
-}, [1, 2, 3]);
+    return hex2bin('73747232');
+})} = call_user_func(function () {
+    return hex2bin('666768696a');
+});
+${call_user_func(function () {
+    return hex2bin('73747233');
+})} = call_user_func(function () {
+    return hex2bin('202020666768696a202020');
+});
+${call_user_func(function () {
+    return hex2bin('73747234');
+})} = call_user_func(function () {
+    return hex2bin('e682a8e5a5bdefbc81');
+});
+${call_user_func(function () {
+    return hex2bin('6e756d31');
+})} = 1234;
+${call_user_func(function () {
+    return hex2bin('6e756d32');
+})} = 6789;
+${call_user_func(function () {
+    return hex2bin('61727231');
+})} = [1, 2, 3, 4, 5];
+${call_user_func(function () {
+    return hex2bin('61727232');
+})} = [call_user_func(function () {
+    return hex2bin('61');
+}), call_user_func(function () {
+    return hex2bin('62');
+}), call_user_func(function () {
+    return hex2bin('63');
+}), call_user_func(function () {
+    return hex2bin('64');
+}), call_user_func(function () {
+    return hex2bin('65');
+})];
+...
 ```
 
 捐助
