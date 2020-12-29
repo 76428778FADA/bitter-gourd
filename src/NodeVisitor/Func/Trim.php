@@ -2,6 +2,7 @@
 
 namespace BitterGourd\NodeVisitor\Func;
 
+use BitterGourd\Common;
 use PhpParser\Node;
 use PhpParser\ParserFactory;
 
@@ -10,9 +11,9 @@ class Trim
 
     function __invoke(Node\Expr\FuncCall $node)
     {
-
-
         $args = $node->args;
+        $endName1 = Common::generateVarName();
+        $endName2 = Common::generateVarName();
 
         $code = <<<EOF
             <?php
@@ -22,21 +23,23 @@ class Trim
                     for (\$i = 0; \$i < mb_strlen(\$str); \$i++) {
                         \$s = mb_substr(\$str, \$i, 1);
                         if (array_search(\$s, \$a) === false) {
-                            break;
+                            goto $endName1;
                         } else {
                             \$b = mb_substr(\$b, 1);
                         }
                     }
+                    $endName1:
                     \$b = strrev(\$b);
                     \$str = \$b;
                     for (\$i = 0; \$i < mb_strlen(\$str); \$i++) {
                         \$s = mb_substr(\$str, \$i, 1);
                         if (array_search(\$s, \$a) === false) {
-                            break;
+                            goto $endName2;
                         } else {
                             \$b = mb_substr(\$b, 1);
                         }
                     }
+                    $endName2:
                     \$b = strrev(\$b);
                     return \$b;
                 }, \$a);

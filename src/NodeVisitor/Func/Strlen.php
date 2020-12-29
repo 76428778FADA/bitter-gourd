@@ -2,6 +2,7 @@
 
 namespace BitterGourd\NodeVisitor\Func;
 
+use BitterGourd\Common;
 use PhpParser\Node;
 use PhpParser\ParserFactory;
 
@@ -10,8 +11,8 @@ class Strlen
 
     function __invoke(Node\Expr\FuncCall $node)
     {
-
         $args = $node->args;
+        $endName = Common::generateVarName();
 
         $code = <<<EOF
             <?php
@@ -19,11 +20,12 @@ class Strlen
                     \$s = 0;
                     while (true) {
                         if (mb_substr(\$v, \$s, 1) == '') {
-                            break;
+                            goto $endName;
                         } else {
                             \$s++;
                         }
                     }
+                    $endName:
                     return \$s;
                 }, '');
 EOF;

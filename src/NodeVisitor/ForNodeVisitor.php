@@ -2,6 +2,7 @@
 
 namespace BitterGourd\NodeVisitor;
 
+use BitterGourd\Common;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
@@ -21,16 +22,19 @@ class ForNodeVisitor extends NodeVisitorAbstract
                 return null;
             }
 
+            $endName = Common::generateVarName();
+
             $code = <<<EOF
             <?php
             \$x = 0;
             while(true){
                 if (1==1) {
                 } else {
-                    break;
+                    goto $endName;
                 }                
                 \$x++;
             }
+            $endName:
 EOF;
             $whileParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
             $whileAst = $whileParser->parse(trim($code));

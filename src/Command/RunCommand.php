@@ -37,8 +37,8 @@ class RunCommand extends Command
             ->setDefinition(
                 new InputDefinition([
                     new InputOption('path', 'p', InputArgument::OPTIONAL, 'Select a directory or file path.'),
-                    new InputOption('loop', 'l', InputArgument::OPTIONAL, 'Loop. The default value is 1 (max:5)'),
-                    new InputOption('test', 't', InputArgument::REQUIRED, 'Test.')
+                    new InputOption('loop', 'l', InputArgument::OPTIONAL, 'Loop. The default value is 1 (max:3)'),
+                    new InputOption('test', 't', InputArgument::REQUIRED, 'Test. Create the test file')
                 ])
             );
     }
@@ -55,8 +55,8 @@ class RunCommand extends Command
 
         $path = $input->getOption('path');
         $loop = abs(intval($input->getOption('loop') ?? 1));
-        if ($loop > 5) {
-            $loop = 5;
+        if ($loop > 3) {
+            $loop = 3;
         }
         $isTest = $input->getOption('test');
         $phpFiles = [];
