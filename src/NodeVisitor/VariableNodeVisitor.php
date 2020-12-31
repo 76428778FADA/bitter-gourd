@@ -20,13 +20,31 @@ class VariableNodeVisitor extends NodeVisitorAbstract
                 return null;
             }
 
+            if ($parentNode instanceof Node\Stmt\Catch_) {
+                return null;
+            }
+
             if ($parentNode instanceof Node\Param) {
+                return null;
+            }
+
+            if ($parentNode instanceof Node\Expr\ClosureUse) {
                 return null;
             }
 
             if ($parentNode instanceof Node\Stmt\Global_) {
                 return null;
             }
+
+/*            if ($parentNode instanceof Node\Expr\ArrayItem) {
+                if ($parentNode->getAttribute('parent') instanceof Node\Expr\Array_) {
+                    if ($parentNode->getAttribute('parent')->getAttribute('parent') instanceof Node\Expr\Assign) {
+                        if ($parentNode->getAttribute('parent')->getAttribute('parent')->var === $parentNode->getAttribute('parent')) {
+                            return $node;
+                        }
+                    }
+                }
+            }*/
 
             /*            if ($parentNode instanceof Node\Expr\MethodCall) {
                             return null;
@@ -38,6 +56,10 @@ class VariableNodeVisitor extends NodeVisitorAbstract
 
             if (!is_string($node->name)) {
                 return null;
+            }
+
+            if (in_array($node->name, ['GLOBALS', '_SERVER', '_GET', '_POST', '_FILES', '_REQUEST', '_SESSION', '_ENV', '_COOKIE', 'php_errormsg', 'http_response_header', 'argc', 'argv'])) {
+                return $node;
             }
 
             $newNode = Common::stringNToFuncN($node->name);

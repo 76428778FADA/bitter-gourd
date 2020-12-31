@@ -13,6 +13,7 @@ use BitterGourd\NodeVisitor\SwitchNodeVisitor;
 use BitterGourd\NodeVisitor\VariableNodeVisitor;
 use PhpParser\Error;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -111,16 +112,17 @@ class RunCommand extends Command
         }
 
         $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NodeConnectingVisitor());
         $traverser->addVisitor(new ForeachNodeVisitor());
         $traverser->addVisitor(new ForNodeVisitor());
         $traverser->addVisitor(new IfNodeVisitor());
-        $traverser->addVisitor(new SwitchNodeVisitor());
+        //$traverser->addVisitor(new SwitchNodeVisitor());
         $traverser->addVisitor(new MethodCallNodeVisitor());
         $traverser->addVisitor(new PropertyFetchNodeVisitor());
         $traverser->addVisitor(new FunctionNodeVisitor());
         $traverser->addVisitor(new StringNodeVisitor());
         $traverser->addVisitor(new VariableNodeVisitor());
-        ////$traverser->addVisitor(new LineNodeVisitor());
+        ////x$traverser->addVisitor(new LineNodeVisitor());
         $ast = $traverser->traverse($ast);
 
         $prettyPrinter = new PrettyPrinter\Standard;

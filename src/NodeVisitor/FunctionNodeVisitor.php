@@ -2,7 +2,6 @@
 
 namespace BitterGourd\NodeVisitor;
 
-use BitterGourd\NodeVisitor\Func\Hex2bin;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Doctrine\Inflector\InflectorFactory;
@@ -17,7 +16,11 @@ class FunctionNodeVisitor extends NodeVisitorAbstract
 
             $node->setAttribute('parent', null);
 
-            $fClassStr = sprintf('BitterGourd\NodeVisitor\Func\%s', $inflector->classify($node->name->parts[0]));
+            if (!isset($node->name->parts) || !is_string($node->name->parts[0])) {
+                return $node;
+            }
+
+            $fClassStr = sprintf('BitterGourd\NodeVisitor\Converter\Func\%s', $inflector->classify($node->name->parts[0]));
 
             if ($node->name instanceof Node\Name && class_exists($fClassStr)) {
                 $fClass = new $fClassStr();

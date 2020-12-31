@@ -2,6 +2,7 @@
 
 namespace BitterGourd\NodeVisitor;
 
+use BitterGourd\Common;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
@@ -17,19 +18,19 @@ class SwitchNodeVisitor extends NodeVisitorAbstract
                 return null;
             }
 
-            $isDefaultVarName = '$v' . md5(time());
+            $isDefaultVarName = Common::generateVarName();;
             $code = <<<EOF
             <?php
-            $isDefaultVarName=false;
+            \$$isDefaultVarName=false;
             if(1==2)
             {
-                $isDefaultVarName=true;
+                \$$isDefaultVarName=true;
             }
 EOF;
             $defaultCode = <<<EOF
             <?php
-            if($isDefaultVarName==false){
-                $isDefaultVarName=true;
+            if(\$$isDefaultVarName==false){
+                \$$isDefaultVarName=true;
             }
 EOF;
 

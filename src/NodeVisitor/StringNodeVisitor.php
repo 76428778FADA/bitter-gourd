@@ -8,26 +8,9 @@ use PhpParser\NodeVisitorAbstract;
 
 class StringNodeVisitor extends NodeVisitorAbstract
 {
-    private $stack;
-
-    public function beforeTraverse(array $nodes)
-    {
-        $this->stack = [];
-    }
-
-    public function enterNode(Node $node)
-    {
-
-        if (!empty($this->stack)) {
-            $node->setAttribute('parent', $this->stack[count($this->stack) - 1]);
-        }
-        $this->stack[] = $node;
-    }
 
     public function leaveNode(Node $node)
     {
-
-        array_pop($this->stack);
 
         $parentNode = $node->getAttribute('parent');
 
@@ -44,7 +27,25 @@ class StringNodeVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Node\Scalar\String_ && $node->getAttribute('converted') != true) {
 
+            $tNode = $node;
+            while (true) {
+                $tParentNode = $tNode->getAttribute('parent');
+                if ($tParentNode == null) {
+                    break;
+                }
+                /*if ($tParentNode instanceof Node\Stmt\Property && $tParentNode->flags == 9) {
+                    return $node;
+                }*/
+                if ($tParentNode instanceof Node\Stmt\Property) {
+                    return $node;
+                }
+                $tNode = $tParentNode;
+            }
+
             if ($parentNode instanceof Node\Param && $parentNode->getAttribute('parent') instanceof Node\Stmt\Function_) {
+                return null;
+            }
+            if ($parentNode instanceof Node\Param && $parentNode->getAttribute('parent') instanceof Node\Stmt\ClassMethod) {
                 return null;
             }
 

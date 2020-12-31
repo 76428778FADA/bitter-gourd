@@ -17,7 +17,7 @@ class MethodCallNodeVisitor extends NodeVisitorAbstract
 
             $node->setAttribute('parent', null);
 
-            if (!is_string($node->name->name)) {
+            if (!isset($node->name->name) || !is_string($node->name->name)) {
                 return null;
             }
 

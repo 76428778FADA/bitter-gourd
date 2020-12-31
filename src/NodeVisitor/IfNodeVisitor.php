@@ -28,8 +28,6 @@ class IfNodeVisitor extends NodeVisitorAbstract
                 goto $endName;
             case true:
                 goto $endName;
-            default:
-                goto $endName;
             }
             $endName:
 EOF;
@@ -44,7 +42,7 @@ EOF;
             if ($node->else != null) {
                 $elseStmts = $node->else->stmts;
                 $switchNode->cases[0]->stmts = array_merge($elseStmts, $switchNode->cases[0]->stmts);
-                $switchNode->cases[2]->stmts = array_merge($elseStmts, $switchNode->cases[2]->stmts);
+                // $switchNode->cases[2]->stmts = array_merge($elseStmts, $switchNode->cases[2]->stmts);
             }
             $switchNode->cond = $cond;
             $switchNode->cases[1]->stmts = array_merge($stmts, $switchNode->cases[1]->stmts);
